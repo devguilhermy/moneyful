@@ -1,8 +1,8 @@
-import * as Icons from './assets/icons';
+import { Dashboard } from './pages/Dashboard';
 export function App() {
     return (
-        <div className="">
-            <h2>Hello</h2>
-        </div>
+        <>
+            <Dashboard />
+        </>
     );
 }

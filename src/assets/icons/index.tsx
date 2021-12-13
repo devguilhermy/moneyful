@@ -7,4 +7,4 @@ import {
     BsArrowUpCircle as Income,
 } from 'react-icons/bs';
 
-export { Expense, Income, Money, Close };
+export const Icons = { Expense, Income, Money, Close };

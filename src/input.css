@@ -19,4 +19,17 @@ h6 {
     @apply font-semibold;
 }
 
+.transition {
+    transition: all 0.2s ease-in-out;
+}
+
+.border-spacing {
+    border-collapse: separate;
+    border-spacing: 0rem 0.5rem;
+}
+
+.cell-padding {
+    @apply px-8 py-4;
+}
+
 @tailwind utilities;
