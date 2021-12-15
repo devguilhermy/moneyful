@@ -1,31 +1,32 @@
 import { dateFormatter, priceFormatter } from '../src/utils';
+import { useEffect, useState } from 'react';
 
-import { useState } from 'react';
+import { api } from '../services/api';
+
+interface Transaction {
+    title: string;
+    value: number;
+    category: string;
+    type: 'income' | 'outcome';
+    date: string;
+}
 
 export function TransactionsTable() {
-    const [transactions, setTransactions] = useState([
+    const [transactions, setTransactions] = useState<Transaction[]>([
         {
-            title: 'App freelance',
-            value: 12500,
-            category: 'Trabalho',
+            title: 'Carregando',
+            value: 0,
+            category: 'Carregando',
             type: 'income',
-            date: new Date(),
-        },
-        {
-            title: 'Aluguel',
-            value: -3500,
-            category: 'Moradia',
-            type: 'outcome',
-            date: new Date(),
-        },
-        {
-            title: 'Consórcio Sonho Meu',
-            value: 8000,
-            category: 'Consórcio',
-            type: 'income',
-            date: new Date(),
+            date: String(new Date()),
         },
     ]);
+
+    useEffect(() => {
+        api.get('https://localhost:3000/api/transactions').then((response) =>
+            setTransactions(response.data)
+        );
+    }, []);
 
     return (
         <div className="mt-5">
@@ -49,7 +50,10 @@ export function TransactionsTable() {
                 <tbody className="text-left">
                     {transactions.map((transaction, index) => {
                         return (
-                            <tr className="font-medium bg-white shadow-md">
+                            <tr
+                                className="font-medium bg-white shadow-md"
+                                key={index}
+                            >
                                 <td className="text-gray-800 border-0 cell-padding rounded-l-md">
                                     {transaction.title}
                                 </td>

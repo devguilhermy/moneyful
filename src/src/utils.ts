@@ -11,7 +11,7 @@ export function priceFormatter(value: number) {
     return formatter.format(value); /* $2,500.00 */
 }
 
-export function dateFormatter(date: Date) {
+export function dateFormatter(date: string) {
     // let options = {
     //     hour: ,
     //     minute: 'numeric',
@@ -28,5 +28,5 @@ export function dateFormatter(date: Date) {
         timeZone: 'America/Sao_Paulo',
     });
 
-    return formatter.format(date); /* $2,500.00 */
+    return formatter.format(new Date(date)); /* $2,500.00 */
 }
