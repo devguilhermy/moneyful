@@ -1,14 +1,36 @@
+import {
+    Transaction,
+    TransactionsTable,
+} from '../components/TransactionsTable';
+import { useEffect, useState } from 'react';
+
 import { Header } from '../components/Header';
 import { Summary } from '../components/Summary';
-import { TransactionsTable } from '../components/TransactionsTable';
+import { api } from '../services/api';
 
 export function Dashboard() {
+    const [transactions, setTransactions] = useState<Transaction[]>([
+        {
+            title: 'Carregando',
+            value: 0,
+            category: 'Carregando',
+            type: 'income',
+            date: String(new Date()),
+        },
+    ]);
+
+    useEffect(() => {
+        api.get('https://localhost:3000/api/transactions').then((response) =>
+            setTransactions(response.data)
+        );
+    }, []);
+
     return (
         <>
             <Header />
-            <div className="max-w-5xl mx-auto py-10 px-4">
-                <Summary />
-                <TransactionsTable />
+            <div className="max-w-5xl px-4 py-10 mx-auto">
+                <Summary transactions={transactions} />
+                <TransactionsTable transactions={transactions} />
             </div>
         </>
     );

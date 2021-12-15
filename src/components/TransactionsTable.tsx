@@ -1,32 +1,18 @@
 import { dateFormatter, priceFormatter } from '../src/utils';
 
-import { useState } from 'react';
+export interface Transaction {
+    title: string;
+    value: number;
+    category: string;
+    type: 'income' | 'outcome';
+    date: string;
+}
 
-export function TransactionsTable() {
-    const [transactions, setTransactions] = useState([
-        {
-            title: 'App freelance',
-            value: 12500,
-            category: 'Trabalho',
-            type: 'income',
-            date: new Date(),
-        },
-        {
-            title: 'Aluguel',
-            value: -3500,
-            category: 'Moradia',
-            type: 'outcome',
-            date: new Date(),
-        },
-        {
-            title: 'Consórcio Sonho Meu',
-            value: 8000,
-            category: 'Consórcio',
-            type: 'income',
-            date: new Date(),
-        },
-    ]);
+interface TransactionsTableProps {
+    transactions: Transaction[];
+}
 
+export function TransactionsTable({ transactions }: TransactionsTableProps) {
     return (
         <div className="mt-5">
             <table className="w-full border-spacing">
@@ -49,7 +35,10 @@ export function TransactionsTable() {
                 <tbody className="text-left">
                     {transactions.map((transaction, index) => {
                         return (
-                            <tr className="font-medium bg-white shadow-md">
+                            <tr
+                                className="font-medium bg-white shadow-md"
+                                key={index}
+                            >
                                 <td className="text-gray-800 border-0 cell-padding rounded-l-md">
                                     {transaction.title}
                                 </td>
