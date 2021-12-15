@@ -13,9 +13,16 @@ export function TransactionsTable() {
         },
         {
             title: 'Aluguel',
-            value: 3500,
+            value: -3500,
             category: 'Moradia',
             type: 'outcome',
+            date: new Date(),
+        },
+        {
+            title: 'Consórcio Sonho Meu',
+            value: 8000,
+            category: 'Consórcio',
+            type: 'income',
             date: new Date(),
         },
     ]);
@@ -23,21 +30,27 @@ export function TransactionsTable() {
     return (
         <div className="mt-5">
             <table className="w-full border-spacing">
-                <thead className="text-left">
+                <thead className="">
                     <tr className="">
-                        <th className="text-gray-500 cell-padding">Título</th>
-                        <th className="text-gray-500 cell-padding">Valor</th>
-                        <th className="text-gray-500 cell-padding">
+                        <th className="leading-6 text-left text-gray-500 cell-padding">
+                            Título
+                        </th>
+                        <th className="leading-6 text-left text-gray-500 cell-padding">
+                            Valor
+                        </th>
+                        <th className="leading-6 text-left text-gray-500 cell-padding">
                             Categoria
                         </th>
-                        <th className="text-gray-500 cell-padding">Data</th>
+                        <th className="leading-6 text-left text-gray-500 cell-padding">
+                            Data
+                        </th>
                     </tr>
                 </thead>
                 <tbody className="text-left">
                     {transactions.map((transaction, index) => {
                         return (
-                            <tr className="bg-white shadow-md ">
-                                <td className="cell-padding border-0 text-gray-800 rounded-l-md">
+                            <tr className="font-medium bg-white shadow-md">
+                                <td className="text-gray-800 border-0 cell-padding rounded-l-md">
                                     {transaction.title}
                                 </td>
                                 <td
@@ -49,10 +62,10 @@ export function TransactionsTable() {
                                 >
                                     {priceFormatter(transaction.value)}
                                 </td>
-                                <td className="cell-padding border-0 text-gray-500">
+                                <td className="text-gray-500 border-0 cell-padding">
                                     {transaction.category}
                                 </td>
-                                <td className="cell-padding border-0 text-gray-500 rounded-r-md">
+                                <td className="text-gray-500 border-0 cell-padding rounded-r-md">
                                     {dateFormatter(transaction.date)}
                                 </td>
                             </tr>
