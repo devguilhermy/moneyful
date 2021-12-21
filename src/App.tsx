@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export function App() {
     const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] =
-        useState(false);
+        useState(true);
 
     function handleToggleNewTransactionModal(state?: boolean) {
         setIsNewTransactionModalOpen(state || !isNewTransactionModalOpen);
