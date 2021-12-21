@@ -8,7 +8,11 @@ import { Header } from '../components/Header';
 import { Summary } from '../components/Summary';
 import { api } from '../services/api';
 
-export function Dashboard() {
+interface DashboardProps {
+    onToggleNewTransactionModal: (state?: boolean) => void;
+}
+
+export function Dashboard({ onToggleNewTransactionModal }: DashboardProps) {
     const [transactions, setTransactions] = useState<Transaction[]>([
         {
             title: 'Carregando',
@@ -27,7 +31,7 @@ export function Dashboard() {
 
     return (
         <>
-            <Header />
+            <Header onToggleNewTransactionModal={onToggleNewTransactionModal} />
             <div className="max-w-5xl px-4 py-10 mx-auto">
                 <Summary transactions={transactions} />
                 <TransactionsTable transactions={transactions} />
