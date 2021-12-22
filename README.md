@@ -1,7 +1,6 @@
 # Moneyful
 
-Tenha um melhor controle financeiro usando o Moneyful
-Cadastre transações de entrada e saída e informações relacionadas
+Melhore seu controle financeiro usando o Moneyful
 
 [Visite o website de demonstração](https://moneyful-live.vercel.app/)
 
