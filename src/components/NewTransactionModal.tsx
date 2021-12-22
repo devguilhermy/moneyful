@@ -1,6 +1,8 @@
-import { useState } from 'react';
-import Modal, { Styles } from 'react-modal';
+import { FormEvent, useState } from 'react';
+
 import { Icons } from '../assets/icons';
+import Modal from 'react-modal';
+import { useTransactions } from '../hooks/useTransactions';
 
 Modal.setAppElement('#root');
 interface NewTransactionModalProps {
@@ -14,8 +16,33 @@ export function NewTransactionModal({
 }: NewTransactionModalProps) {
     const [title, setTitle] = useState('');
     const [value, setValue] = useState(0);
-    const [type, setType] = useState('income');
+    const [type, setType] = useState<'income' | 'outcome'>('income');
     const [category, setCategory] = useState('');
+
+    const { createTransaction } = useTransactions();
+
+    async function handleSubmitNewTransaction(event: FormEvent) {
+        event.preventDefault();
+
+        const response = await createTransaction({
+            title,
+            value,
+            type,
+            category,
+        });
+
+        if (response.status === 201) {
+            console.log(response.statusText);
+            onToggle(false);
+
+            setTitle('');
+            setValue(0);
+            setType('income');
+            setCategory('');
+        } else {
+            console.error(response);
+        }
+    }
 
     return (
         <Modal
@@ -31,7 +58,7 @@ export function NewTransactionModal({
             >
                 <Icons.Close className="w-6 h-6" />
             </button>
-            <form>
+            <form onSubmit={handleSubmitNewTransaction}>
                 <h2 className="text-2xl font-semibold">Cadastrar transação</h2>
                 <label className="block w-full mt-4">
                     <input

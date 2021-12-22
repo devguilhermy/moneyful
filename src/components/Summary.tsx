@@ -1,12 +1,11 @@
 import { Icons } from '../assets/icons';
-import { Transaction } from './TransactionsTable';
 import { priceFormatter } from '../src/utils';
+import { useTransactions } from '../hooks/useTransactions';
 
-interface SummaryProps {
-    transactions: Transaction[];
-}
+interface SummaryProps {}
 
-export function Summary({ transactions }: SummaryProps) {
+export function Summary(props: SummaryProps) {
+    const { transactions } = useTransactions();
     let incomeTotal = 0;
     let outcomeTotal = 0;
     let summaryTotal = 0;
@@ -19,7 +18,6 @@ export function Summary({ transactions }: SummaryProps) {
             outcomeTotal += transaction.value;
             summaryTotal -= transaction.value;
         }
-        console.log('summary', summaryTotal);
     });
 
     return (

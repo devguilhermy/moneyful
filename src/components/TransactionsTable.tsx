@@ -1,18 +1,12 @@
 import { dateFormatter, priceFormatter } from '../src/utils';
 
-export interface Transaction {
-    title: string;
-    value: number;
-    category: string;
-    type: 'income' | 'outcome';
-    date: string;
-}
+import { useTransactions } from '../hooks/useTransactions';
 
-interface TransactionsTableProps {
-    transactions: Transaction[];
-}
+interface TransactionsTableProps {}
 
-export function TransactionsTable({ transactions }: TransactionsTableProps) {
+export function TransactionsTable(props: TransactionsTableProps) {
+    const { transactions } = useTransactions();
+
     return (
         <div className="mt-5">
             <table className="w-full border-spacing">
@@ -33,11 +27,11 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
                     </tr>
                 </thead>
                 <tbody className="text-left">
-                    {transactions.map((transaction, index) => {
+                    {transactions.map((transaction) => {
                         return (
                             <tr
                                 className="font-medium bg-white shadow-md"
-                                key={index}
+                                key={transaction.id}
                             >
                                 <td className="text-gray-800 border-0 cell-padding rounded-l-md">
                                     {transaction.title}
