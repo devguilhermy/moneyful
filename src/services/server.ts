@@ -1,7 +1,5 @@
 import { Model, createServer } from 'miragejs';
 
-import schema from 'miragejs/orm/schema';
-
 export default function server() {
     const mockModels = {
         transaction: Model.extend({
