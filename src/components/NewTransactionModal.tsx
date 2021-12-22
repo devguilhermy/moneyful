@@ -1,25 +1,38 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
+import { Transaction, useTransactions } from '../hooks/useTransactions';
 
 import { Icons } from '../assets/icons';
 import Modal from 'react-modal';
-import { useTransactions } from '../hooks/useTransactions';
 
 Modal.setAppElement('#root');
 interface NewTransactionModalProps {
     isOpen: boolean;
     onToggle: (state?: boolean) => void;
+    transactionToUpdate?: Transaction;
+    setTransactionToUpdate?: (transaction?: Transaction) => void;
 }
 
 export function NewTransactionModal({
     isOpen,
     onToggle,
+    transactionToUpdate,
+    setTransactionToUpdate,
 }: NewTransactionModalProps) {
     const [title, setTitle] = useState('');
     const [value, setValue] = useState(0);
     const [type, setType] = useState<'income' | 'outcome'>('income');
     const [category, setCategory] = useState('');
 
-    const { createTransaction } = useTransactions();
+    useEffect(() => {
+        if (transactionToUpdate) {
+            setTitle(transactionToUpdate.title);
+            setValue(transactionToUpdate.value);
+            setType(transactionToUpdate.type);
+            setCategory(transactionToUpdate.category);
+        }
+    }, [transactionToUpdate]);
+
+    const { createTransaction, updateTransaction } = useTransactions();
 
     async function handleSubmitNewTransaction(event: FormEvent) {
         event.preventDefault();
@@ -33,21 +46,48 @@ export function NewTransactionModal({
 
         if (response.status === 201) {
             console.log(response.statusText);
-            onToggle(false);
 
-            setTitle('');
-            setValue(0);
-            setType('income');
-            setCategory('');
+            closeModal();
         } else {
             console.error(response);
         }
     }
 
+    async function handleSubmitUpdatedTransaction(event: FormEvent) {
+        event.preventDefault();
+
+        if (transactionToUpdate && setTransactionToUpdate) {
+            const response = await updateTransaction({
+                id: transactionToUpdate.id,
+                title,
+                value,
+                type,
+                category,
+                date: transactionToUpdate.date,
+            });
+
+            if (response.status === 200) {
+                closeModal();
+                setTransactionToUpdate();
+            } else {
+                console.error(response);
+            }
+        }
+    }
+
+    function closeModal() {
+        onToggle(false);
+
+        setTitle('');
+        setValue(0);
+        setType('income');
+        setCategory('');
+    }
+
     return (
         <Modal
             isOpen={isOpen}
-            onRequestClose={() => onToggle(false)}
+            onRequestClose={closeModal}
             contentLabel="Demo"
             overlayClassName={'react-modal-overlay'}
             className={'react-modal-content'}
@@ -58,8 +98,16 @@ export function NewTransactionModal({
             >
                 <Icons.Close className="w-6 h-6" />
             </button>
-            <form onSubmit={handleSubmitNewTransaction}>
-                <h2 className="text-2xl font-semibold">Cadastrar transação</h2>
+            <form
+                onSubmit={
+                    transactionToUpdate
+                        ? handleSubmitUpdatedTransaction
+                        : handleSubmitNewTransaction
+                }
+            >
+                <h2 className="text-2xl font-semibold">
+                    {transactionToUpdate ? 'Editar' : 'Cadastrar'} transação
+                </h2>
                 <label className="block w-full mt-4">
                     <input
                         type="text"
@@ -119,7 +167,7 @@ export function NewTransactionModal({
                     type="submit"
                     className="w-full px-4 py-4 mt-4 text-lg font-semibold text-white transition bg-green-500 rounded-md hover:bg-green-600"
                 >
-                    Cadastrar
+                    {transactionToUpdate ? 'Editar' : 'Cadastrar'}
                 </button>
             </form>
         </Modal>

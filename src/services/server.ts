@@ -1,5 +1,7 @@
 import { Model, createServer } from 'miragejs';
 
+import schema from 'miragejs/orm/schema';
+
 export default function server() {
     const mockModels = {
         transaction: Model.extend({
@@ -45,6 +47,12 @@ export default function server() {
                 return schema.all('transaction');
             });
 
+            this.get('/transactions/:id', (schema, request) => {
+                const { id } = request.params;
+
+                return schema.find('transaction', id);
+            });
+
             this.post('/transactions', (schema, request) => {
                 const data = JSON.parse(request.requestBody);
 
@@ -54,12 +62,21 @@ export default function server() {
                 });
             });
 
+            this.patch('/transactions/:id', (schema, request) => {
+                const { id } = request.params;
+                const data = JSON.parse(request.requestBody);
+
+                const updated = schema.find('transaction', id)?.update(data);
+
+                return updated || {};
+            });
+
             this.delete('/transactions/:id', (schema, request) => {
                 const { id } = request.params;
 
-                schema.find('transaction', id)?.destroy();
+                const deleted = schema.find('transaction', id)?.destroy();
 
-                return {};
+                return deleted || {};
             });
         },
     });

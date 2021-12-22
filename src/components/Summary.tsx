@@ -44,7 +44,11 @@ export function Summary(props: SummaryProps) {
                     {priceFormatter(outcomeTotal)}
                 </p>
             </div>
-            <div className="px-6 py-5 bg-green-500 rounded-md shadow-md">
+            <div
+                className={`px-6 py-5 rounded-md shadow-md ${
+                    summaryTotal >= 0 ? 'bg-green-500' : 'bg-red-500'
+                }`}
+            >
                 <div className="flex items-center justify-between">
                     <span className="font-medium tracking-tight text-white">
                         Total

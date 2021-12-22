@@ -3,9 +3,13 @@ import { dateFormatter, priceFormatter } from '../src/utils';
 import { Icons } from '../assets/icons';
 import { useTransactions } from '../hooks/useTransactions';
 
-interface TransactionsTableProps {}
+interface TransactionsTableProps {
+    handleUpdateTransaction: (transaction_id: number) => void;
+}
 
-export function TransactionsTable(props: TransactionsTableProps) {
+export function TransactionsTable({
+    handleUpdateTransaction,
+}: TransactionsTableProps) {
     const { transactions, deleteTransaction } = useTransactions();
 
     return (
@@ -62,7 +66,14 @@ export function TransactionsTable(props: TransactionsTableProps) {
                                     >
                                         <Icons.Close className="w-5 h-5" />
                                     </button>
-                                    <button className="bg-gray-200 shadow rounded-full p-1 text-gray-700 hover:bg-gray-300 transition">
+                                    <button
+                                        className="bg-gray-200 shadow rounded-full p-1 text-gray-700 hover:bg-gray-300 transition"
+                                        onClick={() =>
+                                            handleUpdateTransaction(
+                                                transaction.id
+                                            )
+                                        }
+                                    >
                                         <Icons.Edit className="w-5 h-5" />
                                     </button>
                                 </td>

@@ -9,7 +9,7 @@ import {
 import { AxiosResponse } from 'axios';
 import { api } from '../services/api';
 
-interface Transaction {
+export interface Transaction {
     id: number;
     title: string;
     value: number;
@@ -29,6 +29,10 @@ interface TransactionContextProps {
     createTransaction: (
         transaction: NewTransaction
     ) => Promise<AxiosResponse<any, any>>;
+    getTransaction: (transaction_id: number) => Promise<AxiosResponse<any>>;
+    updateTransaction: (
+        transactionUpdated: Transaction
+    ) => Promise<AxiosResponse<any>>;
     deleteTransaction: (transaction_id: number) => void;
 }
 
@@ -56,8 +60,35 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         return response;
     }
 
+    async function getTransaction(transaction_id: number) {
+        const response = await api.get(`/transactions/${transaction_id}`);
+
+        return response;
+    }
+
+    async function updateTransaction(transactionUpdated: Transaction) {
+        const response = await api.patch(
+            `/transactions/${transactionUpdated.id}`,
+            transactionUpdated
+        );
+
+        if (response.status === 200) {
+            const newTransactionsList = [...transactions];
+
+            const toEditIndex = newTransactionsList.findIndex(
+                (transaction) => transaction.id === transactionUpdated.id
+            );
+
+            newTransactionsList[toEditIndex] = transactionUpdated;
+
+            setTransactions(newTransactionsList);
+        }
+
+        return response;
+    }
+
     async function deleteTransaction(transaction_id: number) {
-        const response = await api.delete('/transactions/' + transaction_id);
+        const response = await api.delete(`/transactions/${transaction_id}`);
 
         if (response.status === 200) {
             const newTransactionsList = [...transactions].filter(
@@ -72,7 +103,13 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
 
     return (
         <TransactionsContext.Provider
-            value={{ transactions, createTransaction, deleteTransaction }}
+            value={{
+                transactions,
+                createTransaction,
+                getTransaction,
+                updateTransaction,
+                deleteTransaction,
+            }}
         >
             {children}
         </TransactionsContext.Provider>
