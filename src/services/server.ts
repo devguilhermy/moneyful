@@ -53,6 +53,14 @@ export default function server() {
                     date: new Date(),
                 });
             });
+
+            this.delete('/transactions/:id', (schema, request) => {
+                const { id } = request.params;
+
+                schema.find('transaction', id)?.destroy();
+
+                return {};
+            });
         },
     });
 }

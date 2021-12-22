@@ -29,6 +29,7 @@ interface TransactionContextProps {
     createTransaction: (
         transaction: NewTransaction
     ) => Promise<AxiosResponse<any, any>>;
+    deleteTransaction: (transaction_id: number) => void;
 }
 
 const TransactionsContext = createContext<TransactionContextProps>(
@@ -55,9 +56,23 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
         return response;
     }
 
+    async function deleteTransaction(transaction_id: number) {
+        const response = await api.delete('/transactions/' + transaction_id);
+
+        if (response.status === 200) {
+            const newTransactionsList = [...transactions].filter(
+                (transaction) => transaction.id !== transaction_id
+            );
+
+            setTransactions(newTransactionsList);
+        }
+
+        return response;
+    }
+
     return (
         <TransactionsContext.Provider
-            value={{ transactions, createTransaction }}
+            value={{ transactions, createTransaction, deleteTransaction }}
         >
             {children}
         </TransactionsContext.Provider>

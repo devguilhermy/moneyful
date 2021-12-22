@@ -1,11 +1,12 @@
 import { dateFormatter, priceFormatter } from '../src/utils';
 
+import { Icons } from '../assets/icons';
 import { useTransactions } from '../hooks/useTransactions';
 
 interface TransactionsTableProps {}
 
 export function TransactionsTable(props: TransactionsTableProps) {
-    const { transactions } = useTransactions();
+    const { transactions, deleteTransaction } = useTransactions();
 
     return (
         <div className="mt-5">
@@ -24,6 +25,7 @@ export function TransactionsTable(props: TransactionsTableProps) {
                         <th className="leading-6 text-left text-gray-500 cell-padding">
                             Data
                         </th>
+                        <th className="leading-6 text-left text-gray-500 cell-padding"></th>
                     </tr>
                 </thead>
                 <tbody className="text-left">
@@ -48,8 +50,21 @@ export function TransactionsTable(props: TransactionsTableProps) {
                                 <td className="text-gray-500 border-0 cell-padding">
                                     {transaction.category}
                                 </td>
-                                <td className="text-gray-500 border-0 cell-padding rounded-r-md">
+                                <td className="text-gray-500 border-0 cell-padding ">
                                     {dateFormatter(transaction.date)}
+                                </td>
+                                <td className="text-gray-500 border-0 cell-padding rounded-r-md flex items-center justify-center gap-1">
+                                    <button
+                                        className="bg-gray-200 shadow rounded-full p-1 text-gray-700 hover:bg-gray-300 transition"
+                                        onClick={() =>
+                                            deleteTransaction(transaction.id)
+                                        }
+                                    >
+                                        <Icons.Close className="w-5 h-5" />
+                                    </button>
+                                    <button className="bg-gray-200 shadow rounded-full p-1 text-gray-700 hover:bg-gray-300 transition">
+                                        <Icons.Edit className="w-5 h-5" />
+                                    </button>
                                 </td>
                             </tr>
                         );

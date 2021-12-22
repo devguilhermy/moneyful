@@ -1,5 +1,6 @@
 import {
     RiCloseFill as Close,
+    RiEditLine as Edit,
     RiMoneyDollarCircleLine as Money,
 } from 'react-icons/ri';
 import {
@@ -7,4 +8,4 @@ import {
     BsArrowUpCircle as Income,
 } from 'react-icons/bs';
 
-export const Icons = { Expense, Income, Money, Close };
+export const Icons = { Edit, Expense, Income, Money, Close };
