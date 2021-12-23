@@ -1,27 +1,27 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { Transaction, useTransactions } from '../hooks/useTransactions';
 
 import { Icons } from '../assets/icons';
 import Modal from 'react-modal';
+import { useNewTransactionModal } from '../hooks/useNewTransactionModal';
+import { useTransactions } from '../hooks/useTransactions';
 
 Modal.setAppElement('#root');
-interface NewTransactionModalProps {
-    isOpen: boolean;
-    onToggle: (state?: boolean) => void;
-    transactionToUpdate?: Transaction;
-    setTransactionToUpdate?: (transaction?: Transaction) => void;
-}
+interface NewTransactionModalProps {}
 
-export function NewTransactionModal({
-    isOpen,
-    onToggle,
-    transactionToUpdate,
-    setTransactionToUpdate,
-}: NewTransactionModalProps) {
+export function NewTransactionModal(props: NewTransactionModalProps) {
     const [title, setTitle] = useState('');
     const [value, setValue] = useState(0);
     const [type, setType] = useState<'income' | 'outcome'>('income');
     const [category, setCategory] = useState('');
+
+    const {
+        createTransaction,
+        updateTransaction,
+        transactionToUpdate,
+        setTransactionToUpdate,
+    } = useTransactions();
+
+    const { isModalOpen, setIsModalOpen } = useNewTransactionModal();
 
     useEffect(() => {
         if (transactionToUpdate) {
@@ -31,8 +31,6 @@ export function NewTransactionModal({
             setCategory(transactionToUpdate.category);
         }
     }, [transactionToUpdate]);
-
-    const { createTransaction, updateTransaction } = useTransactions();
 
     async function handleSubmitNewTransaction(event: FormEvent) {
         event.preventDefault();
@@ -45,8 +43,6 @@ export function NewTransactionModal({
         });
 
         if (response.status === 201) {
-            console.log(response.statusText);
-
             closeModal();
         } else {
             console.error(response);
@@ -56,7 +52,7 @@ export function NewTransactionModal({
     async function handleSubmitUpdatedTransaction(event: FormEvent) {
         event.preventDefault();
 
-        if (transactionToUpdate && setTransactionToUpdate) {
+        if (transactionToUpdate) {
             const response = await updateTransaction({
                 id: transactionToUpdate.id,
                 title,
@@ -68,7 +64,6 @@ export function NewTransactionModal({
 
             if (response.status === 200) {
                 closeModal();
-                setTransactionToUpdate();
             } else {
                 console.error(response);
             }
@@ -76,7 +71,8 @@ export function NewTransactionModal({
     }
 
     function closeModal() {
-        onToggle(false);
+        setTransactionToUpdate(undefined);
+        setIsModalOpen(false);
 
         setTitle('');
         setValue(0);
@@ -86,7 +82,7 @@ export function NewTransactionModal({
 
     return (
         <Modal
-            isOpen={isOpen}
+            isOpen={isModalOpen}
             onRequestClose={closeModal}
             contentLabel="Demo"
             overlayClassName={'react-modal-overlay'}
@@ -94,7 +90,7 @@ export function NewTransactionModal({
         >
             <button
                 className="react-modal-close"
-                onClick={() => onToggle(false)}
+                onClick={() => setIsModalOpen(false)}
             >
                 <Icons.Close className="w-6 h-6" />
             </button>

@@ -8,6 +8,7 @@ import {
 
 import { AxiosResponse } from 'axios';
 import { api } from '../services/api';
+import { useNewTransactionModal } from './useNewTransactionModal';
 
 export interface Transaction {
     id: number;
@@ -34,6 +35,9 @@ interface TransactionContextProps {
         transactionUpdated: Transaction
     ) => Promise<AxiosResponse<any>>;
     deleteTransaction: (transaction_id: number) => void;
+    handleTransactionToUpdate: (transaction: Transaction) => void;
+    transactionToUpdate?: Transaction;
+    setTransactionToUpdate: (transaction: Transaction | undefined) => void;
 }
 
 const TransactionsContext = createContext<TransactionContextProps>(
@@ -42,12 +46,21 @@ const TransactionsContext = createContext<TransactionContextProps>(
 
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [transactionToUpdate, setTransactionToUpdate] =
+        useState<Transaction>();
+
+    const { setIsModalOpen } = useNewTransactionModal();
 
     useEffect(() => {
         api.get('/transactions').then((response) =>
             setTransactions(response.data.transactions)
         );
     }, []);
+
+    function handleTransactionToUpdate(transaction: Transaction) {
+        setTransactionToUpdate(transaction);
+        setIsModalOpen(true);
+    }
 
     async function createTransaction(newTransaction: NewTransaction) {
         const response = await api.post('/transactions', newTransaction);
@@ -84,6 +97,8 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
             setTransactions(newTransactionsList);
         }
 
+        setTransactionToUpdate(undefined);
+
         return response;
     }
 
@@ -109,6 +124,9 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
                 getTransaction,
                 updateTransaction,
                 deleteTransaction,
+                handleTransactionToUpdate,
+                transactionToUpdate,
+                setTransactionToUpdate,
             }}
         >
             {children}

@@ -577,12 +577,12 @@ h1, h2, h3, h4, h5, h6 {
   height: 1.5rem;
 }
 
-.h-full {
-  height: 100%;
-}
-
 .h-5 {
   height: 1.25rem;
+}
+
+.h-full {
+  height: 100%;
 }
 
 .w-6 {
@@ -605,24 +605,8 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 64rem;
 }
 
-.flex-1 {
-  flex: 1 1 0%;
-}
-
-.flex-shrink {
-  flex-shrink: 1;
-}
-
-.flex-shrink-0 {
-  flex-shrink: 0;
-}
-
 .grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.flex-col {
-  flex-direction: column;
 }
 
 .items-center {

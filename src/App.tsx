@@ -1,36 +1,17 @@
-import { Transaction, TransactionsProvider } from './hooks/useTransactions';
-
 import { Dashboard } from './pages/Dashboard';
 import { NewTransactionModal } from './components/NewTransactionModal';
-import { useState } from 'react';
+import { NewTransactionModalProvider } from './hooks/useNewTransactionModal';
+import { TransactionsProvider } from './hooks/useTransactions';
 
 export function App() {
-    const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] =
-        useState(false);
-
-    const [transactionToUpdate, setTransactionToUpdate] =
-        useState<Transaction>();
-
-    function handleToggleNewTransactionModal(state?: boolean) {
-        setIsNewTransactionModalOpen(state || !isNewTransactionModalOpen);
-    }
-
     return (
         <>
-            <TransactionsProvider>
-                <Dashboard
-                    onToggleNewTransactionModal={
-                        handleToggleNewTransactionModal
-                    }
-                    setTransactionToUpdate={setTransactionToUpdate}
-                />
-                <NewTransactionModal
-                    isOpen={isNewTransactionModalOpen}
-                    onToggle={handleToggleNewTransactionModal}
-                    transactionToUpdate={transactionToUpdate}
-                    setTransactionToUpdate={setTransactionToUpdate}
-                />
-            </TransactionsProvider>
+            <NewTransactionModalProvider>
+                <TransactionsProvider>
+                    <Dashboard />
+                    <NewTransactionModal />
+                </TransactionsProvider>
+            </NewTransactionModalProvider>
         </>
     );
 }
