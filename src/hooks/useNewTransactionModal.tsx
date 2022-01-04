@@ -4,14 +4,14 @@ interface NewTransactionModalProviderProps {
     children: ReactNode;
 }
 
-interface NewTransactionModalContextProps {
+interface NewTransactionModalContextData {
     isModalOpen: boolean;
     setIsModalOpen: (status: boolean) => void;
 }
 
 const NewTransactionModalContext =
-    createContext<NewTransactionModalContextProps>(
-        {} as NewTransactionModalContextProps
+    createContext<NewTransactionModalContextData>(
+        {} as NewTransactionModalContextData
     );
 
 export function NewTransactionModalProvider({

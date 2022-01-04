@@ -1,18 +1,16 @@
-import { Model, createServer } from 'miragejs';
+import { createServer, Model } from 'miragejs';
 
 export default function server() {
-    const mockModels = {
-        transaction: Model.extend({
-            title: 'Compras Super10',
-            value: 352,
-            type: 'outcome',
-            category: 'Mercado',
-            date: String(new Date()),
-        }),
-    };
-
     createServer({
-        models: mockModels,
+        models: {
+            transaction: Model.extend({
+                title: 'Compras Super10',
+                value: 352,
+                type: 'outcome',
+                category: 'Mercado',
+                date: String(new Date()),
+            }),
+        },
 
         seeds(server) {
             server.create('transaction', {
